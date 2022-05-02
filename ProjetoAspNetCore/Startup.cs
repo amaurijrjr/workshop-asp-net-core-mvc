@@ -37,7 +37,8 @@ namespace ProjetoAspNetCore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ProjetoAspNetCoreContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ProjetoAspNetCoreContext")));
+                    options.UseMySql(Configuration.GetConnectionString("ProjetoAspNetCoreContext"), builder =>
+                        builder.MigrationsAssembly("ProjetoAspNetCore")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
