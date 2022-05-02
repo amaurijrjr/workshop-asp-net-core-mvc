@@ -17,7 +17,8 @@ namespace ProjetoAspNetCore.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Salles web MVC app from C# course";
+            ViewData["Professor"] = "Nélio Alves";
 
             return View();
         }
