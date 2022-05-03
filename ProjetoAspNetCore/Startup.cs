@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ProjetoAspNetCore.Models;
+using ProjetoAspNetCore.Data;
 
 namespace ProjetoAspNetCore
 {
@@ -39,14 +40,17 @@ namespace ProjetoAspNetCore
             services.AddDbContext<ProjetoAspNetCoreContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("ProjetoAspNetCoreContext"), builder =>
                         builder.MigrationsAssembly("ProjetoAspNetCore")));
+
+            services.AddScoped<SeedingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed();
             }
             else
             {
