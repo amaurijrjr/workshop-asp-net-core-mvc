@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ProjetoAspNetCore.Models;
 using ProjetoAspNetCore.Data;
+using ProjetoAspNetCore.Services;
 
 namespace ProjetoAspNetCore
 {
@@ -42,6 +43,7 @@ namespace ProjetoAspNetCore
                         builder.MigrationsAssembly("ProjetoAspNetCore")));
 
             services.AddScoped<SeedingService>();
+            services.AddScoped<SellerServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
