@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoAspNetCore.Models;
 
 namespace ProjetoAspNetCore.Migrations
 {
     [DbContext(typeof(ProjetoAspNetCoreContext))]
-    partial class ProjetoAspNetCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220523130132_DepartmentForeignKey")]
+    partial class DepartmentForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
