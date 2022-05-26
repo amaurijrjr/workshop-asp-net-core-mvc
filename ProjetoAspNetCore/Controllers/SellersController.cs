@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoAspNetCore.Models;
 using ProjetoAspNetCore.Services;
 using ProjetoAspNetCore.Models.ViewModels;
+using ProjetoAspNetCore.Services.Exceptions;
 
 namespace ProjetoAspNetCore.Controllers
 {
@@ -81,12 +79,48 @@ namespace ProjetoAspNetCore.Controllers
             return View(obj);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        ////public IActionResult Details(int? id)
-        //{
-        //    _sellerServices.
-        //}
+        public IActionResult Edit(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellerServices.FindById(id.Value);
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if(id != seller.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _sellerServices.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundExceptions)
+            {
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
+        }
 
     }
 }
