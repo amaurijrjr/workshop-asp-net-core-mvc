@@ -4,6 +4,8 @@ using ProjetoAspNetCore.Models;
 using ProjetoAspNetCore.Services;
 using ProjetoAspNetCore.Models.ViewModels;
 using ProjetoAspNetCore.Services.Exceptions;
+using System.Diagnostics;
+using System;
 
 namespace ProjetoAspNetCore.Controllers
 {
@@ -43,13 +45,13 @@ namespace ProjetoAspNetCore.Controllers
         {
             if(id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided." });
             }
 
             var obj = _sellerServices.FindById(id.Value);
             if(obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found." });
             }
 
             return View(obj);
@@ -67,13 +69,13 @@ namespace ProjetoAspNetCore.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided." });
             }
 
             var obj = _sellerServices.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found." });
             }
 
             return View(obj);
@@ -83,13 +85,13 @@ namespace ProjetoAspNetCore.Controllers
         {
             if(id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided." });
             }
 
             var obj = _sellerServices.FindById(id.Value);
             if(id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found." });
             }
 
             List<Department> departments = _departmentService.FindAll();
@@ -104,7 +106,7 @@ namespace ProjetoAspNetCore.Controllers
         {
             if(id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id not mismatch." });
             }
 
             try
@@ -112,14 +114,23 @@ namespace ProjetoAspNetCore.Controllers
                 _sellerServices.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundExceptions)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DbConcurrencyException)
+            
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
             {
-                return BadRequest();
-            }
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            return View(viewModel);
+
         }
 
     }
